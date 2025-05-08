@@ -1,0 +1,21 @@
+{
+  "[typescript][typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  "[javascript][json][jsonc][jsonl]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "files.eol": "\n",
+
+  "cSpell.words": ["solana", "tanstack", "turbopack"]
+}
