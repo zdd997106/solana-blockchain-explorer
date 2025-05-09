@@ -10,7 +10,9 @@ interface PageProps {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { slot: customSlot, page = 1, limit = 10 } = await searchParams;
+  const { page = 1, limit = 10 } = await searchParams;
+  const customSlot = getCustomSlot(await searchParams);
+
   const blocks = await getRpcLatestBlocks({
     limit,
     slot: customSlot ? BigInt(customSlot) - BigInt((page - 1) * limit) : undefined,
@@ -30,8 +32,16 @@ export default async function Page({ searchParams }: PageProps) {
 
 // ----- HELPERS -----
 
-const blockService = new BlockService();
+function getCustomSlot(searchParams: Awaited<PageProps['searchParams']>) {
+  try {
+    if (searchParams.slot) return BigInt(searchParams.slot);
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
 
+const blockService = new BlockService();
 const getRpcLatestBlocks = cacheable(blockService.getLatestBlocks, {
   revalidate: 1,
   useStaleWhileRevalidate: true,

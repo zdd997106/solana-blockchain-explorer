@@ -19,12 +19,16 @@ interface BlocksViewProps {
 export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps) {
   const router = useRouter();
 
+  // --- HANDLERS ---
+
   const handleChangePage = (_event: unknown, page: number) => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('page', page.toString());
     searchParams.set('slot', slot);
     router.push(`?${searchParams.toString()}`);
   };
+
+  // --- SECTIONED ELEMENTS ---
 
   const sections = {
     cells: {
@@ -36,7 +40,7 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
         <Cell label="Transactions" path="transactionLength" render={formatNumber} />
       ),
 
-      rewardLength: <Cell label="Rewards" path="rewards.length" />,
+      rewardLength: <Cell label="Rewards" path="rewards.length" render={formatNumber} />,
 
       blockTime: (
         <Cell
@@ -50,8 +54,8 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
 
       action: (
         <Cell
-          render={() => (
-            <Link href={`/blocks/${blocks[0].slot}`}>
+          render={(_, block: PreviewBlockDto) => (
+            <Link href={`/blocks/${block.slot}`}>
               <Button
                 variant="contained"
                 size="small"
@@ -64,6 +68,15 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
         />
       ),
     },
+
+    pagination: (
+      <Pagination
+        page={+page}
+        count={100}
+        sx={{ ul: { flexWrap: 'nowrap' } }}
+        onChange={handleChangePage}
+      />
+    ),
   };
 
   return (
@@ -80,12 +93,7 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
       </Stack>
 
       <Stack sx={{ maxWidth: '100%', overflowX: 'auto', alignSelf: 'end' }}>
-        <Pagination
-          page={+page}
-          count={100}
-          sx={{ ul: { flexWrap: 'nowrap' } }}
-          onChange={handleChangePage}
-        />
+        {sections.pagination}
       </Stack>
     </Stack>
   );
