@@ -7,7 +7,7 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
 
-  "[javascript][json][jsonc][jsonl]": {
+  "[json]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
@@ -17,5 +17,11 @@
 
   "files.eol": "\n",
 
-  "cSpell.words": ["solana", "tanstack", "turbopack"]
+  "cSpell.words": [
+    "blockhash",
+    "gexii",
+    "solana",
+    "tanstack",
+    "turbopack"
+  ]
 }
