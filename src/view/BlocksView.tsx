@@ -40,8 +40,6 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
         <Cell label="Transactions" path="transactionLength" render={formatNumber} />
       ),
 
-      rewardLength: <Cell label="Rewards" path="rewards.length" render={formatNumber} />,
-
       blockTime: (
         <Cell
           label="Time"
@@ -54,6 +52,7 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
 
       action: (
         <Cell
+          width={80}
           render={(_, block: PreviewBlockDto) => (
             <Link href={`/blocks/${block.slot}`}>
               <Button
@@ -86,7 +85,6 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
           {sections.cells.slot}
           {sections.cells.blockhash}
           {sections.cells.transactionLength}
-          {sections.cells.rewardLength}
           {sections.cells.blockTime}
           {sections.cells.action}
         </Table>
