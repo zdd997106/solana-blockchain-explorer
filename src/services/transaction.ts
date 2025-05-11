@@ -26,3 +26,5 @@ export default class TransactionService extends RpcService {
 }
 
 export type TransactionDto = NonNullable<Awaited<ReturnType<TransactionService['getTransaction']>>>;
+
+export type TransactionAccountDto = TransactionDto['transaction']['message']['accountKeys'][number];

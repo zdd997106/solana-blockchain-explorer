@@ -4,7 +4,8 @@ import pluralize from 'pluralize';
 /**
  * Return a string with the time difference in a human-readable format.
  */
-export function timeAgo(diff: number) {
+export function timeAgo(time: Date, { now = Date.now() }: TimeAgoOptions = {}) {
+  const diff = new Date(now).getTime() - time.getTime();
   if (diff < intervals.second) return 'Just now';
   const hitInterval = Object.entries(intervals).findLast(([_, value]) => diff >= value);
 
@@ -15,6 +16,12 @@ export function timeAgo(diff: number) {
   const value = Math.floor(diff / Number(hitInterval[1]));
   return `${value} ${pluralize(unit, value)} ago`;
 }
+
+interface TimeAgoOptions {
+  now?: Date | number;
+}
+
+// ----------
 
 const intervals = {
   second: 1000,

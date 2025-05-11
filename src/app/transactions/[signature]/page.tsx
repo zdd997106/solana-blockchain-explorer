@@ -6,6 +6,7 @@ import { InnerInstructionDto, InstructionDto, TransactionService } from 'src/ser
 import { InstructionTitle } from 'src/components';
 import InstructionView from 'src/view/InstructionView';
 import TransactionView from 'src/view/TransactionView';
+import AccountsView from 'src/view/AccountsView';
 
 const transactionService = new TransactionService();
 
@@ -38,6 +39,15 @@ export default async function Page(props: PageProps) {
     transactionDetail: (
       <Card variant="outlined" sx={{ padding: 4, marginBottom: 5 }}>
         <TransactionView transaction={transaction} />
+      </Card>
+    ),
+
+    accounts: (
+      <Card variant="outlined" sx={{ marginBottom: 5 }}>
+        <AccountsView
+          accounts={Array.from(transaction.transaction.message.accountKeys)}
+          transaction={transaction}
+        />
       </Card>
     ),
 
@@ -76,6 +86,9 @@ export default async function Page(props: PageProps) {
       </Typography>
 
       {sections.transactionDetail}
+
+      {sections.accounts}
+
       <Stack spacing={2}>
         {instructions.map((instruction, index) => (
           <Fragment key={index}>{sections.instruction(instruction, index)}</Fragment>

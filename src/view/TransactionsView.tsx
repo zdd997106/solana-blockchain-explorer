@@ -1,11 +1,13 @@
 'use client';
 
-import { Chip, Pagination, Stack, Switch, Typography } from '@mui/material';
-import type { PreviewTransactionDto } from 'src/services';
-import { Cell, Table } from 'gexii/table';
-import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { has } from 'lodash';
+import { useMemo, useState } from 'react';
+import { Cell, Table } from 'gexii/table';
+import Link from 'next/link';
+import { Chip, Pagination, Stack, Switch, Typography } from '@mui/material';
+
+import type { PreviewTransactionDto } from 'src/services';
+import { Description } from 'src/components';
 
 // ----------
 
@@ -38,10 +40,11 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
         <Cell
           label="Signature"
           ellipsis
-          render={(transaction: PreviewTransactionDto) => (
-            <Link href={`/transactions/${transaction.transaction.signatures[0]}`}>
-              {transaction.transaction.signatures[0]}
-            </Link>
+          path="transaction.signatures.0"
+          render={(signatures: string) => (
+            <Description copyable value={signatures}>
+              <Link href={`/transactions/${signatures}`}>{signatures}</Link>
+            </Description>
           )}
         />
       ),
@@ -50,9 +53,8 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
         <Cell
           label="Signer"
           ellipsis
-          render={(transaction: PreviewTransactionDto) =>
-            transaction.transaction.message.accountKeys[0]?.pubkey
-          }
+          path="transaction.message.accountKeys.0.pubkey"
+          render={showDescription.copyable}
         />
       ),
 
@@ -61,7 +63,7 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
           width={150}
           label="Fee (SOL)"
           path="meta.fee"
-          render={(fee: bigint) => Number(fee) / 1000000000}
+          render={(fee: bigint) => showDescription(Number(fee) / 1000000000)}
         />
       ),
 
@@ -126,3 +128,13 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
     </Stack>
   );
 }
+
+// ----- HELPERS -----
+
+function showDescription(value: unknown) {
+  return <Description>{value}</Description>;
+}
+
+showDescription.copyable = (value: unknown) => {
+  return <Description copyable>{value}</Description>;
+};

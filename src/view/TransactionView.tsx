@@ -2,9 +2,10 @@
 
 import { Stack } from '@mui/material';
 
-import { OverviewItem as BasedOverviewItem } from 'src/components';
-import { withDefaultProps } from 'src/hoc';
 import type { TransactionDto } from 'src/services';
+import { formatNumber, toDate, toSol } from 'src/utils';
+import { withDefaultProps } from 'src/hoc';
+import { OverviewItem as BasedOverviewItem } from 'src/components';
 
 const OverviewItem = withDefaultProps(BasedOverviewItem, { subjectWidth: 180 });
 
@@ -15,6 +16,8 @@ interface TransactionViewProps {
 }
 
 export default function TransactionView({ transaction }: TransactionViewProps) {
+  // --- SECTIONED ELEMENTS ---
+
   const sections = {
     slot: <OverviewItem subject="Slot" value={transaction.slot} />,
 
@@ -24,9 +27,7 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
       <OverviewItem
         subject="Timestamp"
         value={
-          transaction.blockTime
-            ? new Date(+transaction.blockTime.toString() * 1000).toUTCString()
-            : 'Not available'
+          transaction.blockTime ? toDate(transaction.blockTime).toUTCString() : 'Not available'
         }
       />
     ),
@@ -38,12 +39,7 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
       />
     ),
 
-    fee: (
-      <OverviewItem
-        subject="Fee (SOL)"
-        value={`${Number(transaction.meta?.fee ?? 0) / 1000000000} SOL`}
-      />
-    ),
+    fee: <OverviewItem subject="Fee (SOL)" value={formatNumber(toSol(transaction.meta?.fee))} />,
 
     computeUnitsConsumed: (
       <OverviewItem
