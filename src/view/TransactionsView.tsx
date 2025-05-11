@@ -87,7 +87,7 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
             <Switch
               size="small"
               checked={excludeVote}
-              onClick={() => setExcludeVote(!excludeVote)}
+              onChange={(event) => setExcludeVote(event.target.checked)}
             />
           </Stack>
         }
