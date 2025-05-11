@@ -54,6 +54,8 @@ export default class BlockService extends RpcService {
     const block = await this.rpc
       .getBlock(slot, {
         transactionDetails: 'full',
+        encoding: 'jsonParsed',
+        maxSupportedTransactionVersion: 0,
       })
       .send();
 
@@ -70,3 +72,7 @@ interface GetLatestBlocksPayload {
 
 export interface PreviewBlockDto
   extends NonNullable<Awaited<ReturnType<BlockService['getBlockPreview']>>> {}
+
+export interface BlockDto extends NonNullable<Awaited<ReturnType<BlockService['getBlock']>>> {}
+
+export type PreviewTransactionDto = BlockDto['transactions'][number];
