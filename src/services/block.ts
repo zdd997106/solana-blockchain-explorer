@@ -2,6 +2,7 @@
 import { omit, orderBy } from 'lodash';
 import { sleep } from 'src/utils';
 
+import { SolanaError } from '@solana/kit';
 import { RpcService } from './core';
 
 // ----------
@@ -51,17 +52,23 @@ export default class BlockService extends RpcService {
    * Get the details of a block from the Solana cluster.
    */
   public getBlock = async (slot: bigint) => {
-    const block = await this.rpc
-      .getBlock(slot, {
-        transactionDetails: 'full',
-        encoding: 'jsonParsed',
-        maxSupportedTransactionVersion: 0,
-      })
-      .send();
+    try {
+      const block = await this.rpc
+        .getBlock(slot, {
+          transactionDetails: 'full',
+          encoding: 'jsonParsed',
+          maxSupportedTransactionVersion: 0,
+        })
+        .send();
 
-    if (!block) return null;
+      if (!block) return null;
 
-    return { ...block, slot };
+      return { ...block, slot };
+    } catch (error) {
+      if (error instanceof SolanaError && error.message.includes('Block not available'))
+        return null;
+      throw error;
+    }
   };
 }
 
@@ -76,3 +83,10 @@ export interface PreviewBlockDto
 export interface BlockDto extends NonNullable<Awaited<ReturnType<BlockService['getBlock']>>> {}
 
 export type PreviewTransactionDto = BlockDto['transactions'][number];
+
+export type InstructionDto =
+  PreviewTransactionDto['transaction']['message']['instructions'][number];
+
+export type InnerInstructionDto = NonNullable<
+  PreviewTransactionDto['meta']
+>['innerInstructions'][number]['instructions'][number];

@@ -1,3 +1,4 @@
+import { capitalize, snakeCase } from 'lodash';
 import pluralize from 'pluralize';
 
 /**
@@ -29,4 +30,12 @@ const intervals = {
  */
 export function formatNumber(num: number | bigint) {
   return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+}
+
+export function formatTitle(string: string) {
+  return snakeCase(string)
+    .split(/_|\\-|(?<=[a-zA-Z])(?![a-zA-Z])|(?<=\d)(?!\d)|(?<=[a-z])(?![a-z])|(?<=[A-Z])(?![A-Z])/g)
+    .filter(Boolean)
+    .map(capitalize)
+    .join(' ');
 }

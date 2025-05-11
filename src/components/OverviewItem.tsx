@@ -1,31 +1,41 @@
 'use client';
 
-import { Box, Stack, Typography } from '@mui/material';
-import { mixins } from 'gexii/theme';
-import { isNil } from 'lodash';
+import { Stack, Typography } from '@mui/material';
+
+import Description from './Description';
+
+// ----------
 
 interface OverviewItemProps {
   subject: string;
   value: unknown;
-  subjectWidth?: number;
+  copyable?: boolean;
+  subjectWidth?: string | number;
 }
 
-export function OverviewItem({ subject, value, subjectWidth }: OverviewItemProps) {
+export default function OverviewItem({
+  subject,
+  value,
+  copyable,
+  subjectWidth,
+}: OverviewItemProps) {
   return (
     <Stack
+      width="100%"
       direction={{ xs: 'column', sm: 'row' }}
-      spacing={{ xs: 1, sm: 2 }}
+      spacing={{ xs: 1, sm: 4 }}
       alignItems={{ xs: 'start', sm: 'center' }}
+      justifyContent={{ xs: 'start', sm: 'space-between' }}
     >
-      <Box minWidth={subjectWidth} sx={{ flexShrink: 0 }}>
-        <Typography variant="subtitle2" color="textSecondary">
-          {subject}
-        </Typography>
-      </Box>
+      <Typography
+        variant="subtitle2"
+        color="textSecondary"
+        sx={{ minWidth: { xs: '100%', sm: subjectWidth }, flexShrink: 0 }}
+      >
+        {subject}
+      </Typography>
 
-      <Box sx={{ ...mixins.ellipse(), flexGrow: 1 }}>
-        <Typography variant="body2">{!isNil(value) && String(value)}</Typography>
-      </Box>
+      <Description copyable={copyable}>{value}</Description>
     </Stack>
   );
 }
