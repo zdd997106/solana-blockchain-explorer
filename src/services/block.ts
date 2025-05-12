@@ -1,8 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import { omit, orderBy } from 'lodash';
+import { SolanaError } from '@solana/kit';
+
 import { sleep } from 'src/utils';
 
-import { SolanaError } from '@solana/kit';
 import { RpcService } from './core';
 
 // ----------
@@ -68,6 +69,25 @@ export default class BlockService extends RpcService {
       if (error instanceof SolanaError && error.message.includes('Block not available'))
         return null;
       throw error;
+    }
+  };
+
+  public searchBlock = async (query: string) => {
+    try {
+      if (!query) return null;
+
+      const slot = BigInt(query);
+      const block = await this.rpc
+        .getBlock(slot, {
+          transactionDetails: 'none',
+          encoding: 'json',
+          maxSupportedTransactionVersion: 0,
+        })
+        .send();
+
+      return { ...block, slot };
+    } catch {
+      return null;
     }
   };
 }
