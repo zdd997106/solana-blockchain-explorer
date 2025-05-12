@@ -1,10 +1,15 @@
 // ----------
 
-import { Container, Paper, Typography } from '@mui/material';
+import { Container, Card, Typography, Stack } from '@mui/material';
 import { notFound } from 'next/navigation';
+
 import { BlockService } from 'src/services';
 import BlockView from 'src/view/BlockView';
 import TransactionsView from 'src/view/TransactionsView';
+
+const blockService = new BlockService();
+
+// ----------
 
 interface PageProps {
   params: Promise<{ slot: string }>;
@@ -18,39 +23,42 @@ export default async function Page(props: PageProps) {
     return notFound();
   }
 
+  // --- SECTIONED ELEMENTS ---
+
+  const sections = {
+    blockDetail: (
+      <Card variant="outlined" sx={{ padding: 4, marginBottom: 5 }}>
+        <BlockView block={block} />
+      </Card>
+    ),
+    transactions: (
+      <Card variant="outlined" sx={{ padding: 4, marginBottom: 5 }}>
+        <TransactionsView transactions={Array.from(block.transactions)} />
+      </Card>
+    ),
+  };
+
   return (
     <Container sx={{ paddingY: 5 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" marginBottom={4}>
         Block Detail
       </Typography>
 
-      <Paper
-        sx={{
-          padding: 4,
-          marginBottom: 5,
-          borderRadius: 4,
-          border: '1px solid',
-          borderColor: 'divider',
-        }}
-      >
-        <BlockView block={block} />
-      </Paper>
-
-      <Paper
-        sx={{
-          padding: 4,
-          marginBottom: 5,
-          borderRadius: 4,
-          border: '1px solid',
-          borderColor: 'divider',
-        }}
-      >
-        <TransactionsView transactions={Array.from(block.transactions)} />
-      </Paper>
+      {sections.blockDetail}
+      {withTitle(sections.transactions, 'Transactions')}
     </Container>
   );
 }
 
 // ----- HELPERS -----
 
-const blockService = new BlockService();
+function withTitle(element: React.ReactNode, title: string) {
+  return (
+    <Stack spacing={2}>
+      <Typography variant="h6" marginBottom={2}>
+        {title}
+      </Typography>
+      {element}
+    </Stack>
+  );
+}
