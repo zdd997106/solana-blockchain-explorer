@@ -118,7 +118,7 @@ function getLogTitleColor(logs: OrganizedLog[]) {
 
 function getInvokeLevel(data: string) {
   const parsedLevel = data.split(/^invoke \[(\d+)\]/)[1];
-  return parsedLevel ? Number(parsedLevel) : undefined;
+  return parsedLevel ? Number(parsedLevel) : null;
 }
 
 function getErrorMessage(data: string) {
