@@ -1,9 +1,11 @@
+import { capitalize, snakeCase } from 'lodash';
 import pluralize from 'pluralize';
 
 /**
  * Return a string with the time difference in a human-readable format.
  */
-export function timeAgo(diff: number) {
+export function timeAgo(time: Date, { now = Date.now() }: TimeAgoOptions = {}) {
+  const diff = new Date(now).getTime() - time.getTime();
   if (diff < intervals.second) return 'Just now';
   const hitInterval = Object.entries(intervals).findLast(([_, value]) => diff >= value);
 
@@ -14,6 +16,12 @@ export function timeAgo(diff: number) {
   const value = Math.floor(diff / Number(hitInterval[1]));
   return `${value} ${pluralize(unit, value)} ago`;
 }
+
+interface TimeAgoOptions {
+  now?: Date | number;
+}
+
+// ----------
 
 const intervals = {
   second: 1000,
@@ -29,4 +37,12 @@ const intervals = {
  */
 export function formatNumber(num: number | bigint) {
   return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+}
+
+export function formatTitle(string: string) {
+  return snakeCase(string)
+    .split(/_|\\-|(?<=[a-zA-Z])(?![a-zA-Z])|(?<=\d)(?!\d)|(?<=[a-z])(?![a-z])|(?<=[A-Z])(?![A-Z])/g)
+    .filter(Boolean)
+    .map(capitalize)
+    .join(' ');
 }
