@@ -11,6 +11,10 @@ const blockService = new BlockService();
 
 // ----------
 
+export const runtime = 'edge';
+
+// ----------
+
 interface PageProps {
   params: Promise<{ slot: string }>;
 }

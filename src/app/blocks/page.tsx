@@ -6,6 +6,10 @@ import BlocksView from 'src/view/BlocksView';
 
 // ----------
 
+export const runtime = 'edge';
+
+// ----------
+
 interface PageProps {
   searchParams: Promise<{ slot: string; page: number; limit: number }>;
 }

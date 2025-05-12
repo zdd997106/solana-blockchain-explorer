@@ -13,6 +13,10 @@ const transactionService = new TransactionService();
 
 // ----------
 
+export const runtime = 'edge';
+
+// ----------
+
 interface PageProps {
   params: Promise<{ signature: string }>;
 }
