@@ -1,11 +1,13 @@
 'use client';
 
-import { Table, Cell } from 'gexii/table';
-import { Button, Pagination, Stack } from '@mui/material';
-import { formatNumber, timeAgo } from 'src/utils';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Table, Cell } from 'gexii/table';
+import { Pagination, Stack } from '@mui/material';
+import Link from 'next/link';
+
+import { formatNumber, timeAgo, toDate } from 'src/utils';
 import type { PreviewBlockDto } from 'src/services';
+import { Description } from 'src/components';
 
 // ----------
 
@@ -32,38 +34,41 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
 
   const sections = {
     cells: {
-      slot: <Cell label="#" path="slot" />,
+      slot: (
+        <Cell
+          label="#"
+          width={150}
+          path="slot"
+          render={(slot) => (
+            <Description copyable value={slot}>
+              <Link href={`/blocks/${slot}`}>{formatNumber(slot)}</Link>
+            </Description>
+          )}
+        />
+      ),
 
-      blockhash: <Cell label="Block Hash" path="blockhash" ellipsis />,
+      blockhash: (
+        <Cell
+          label="Block Hash"
+          path="blockhash"
+          render={(blockhash: string, block: PreviewBlockDto) => (
+            <Description copyable value={blockhash}>
+              <Link href={`/blocks/${block.slot}`}>{blockhash}</Link>
+            </Description>
+          )}
+        />
+      ),
 
       transactionLength: (
-        <Cell label="Transactions" path="transactionLength" render={formatNumber} />
+        <Cell width={150} label="Transactions" path="transactionLength" render={formatNumber} />
       ),
 
       blockTime: (
         <Cell
+          width={150}
           label="Time"
           path="blockTime"
-          render={(blockTime: PreviewBlockDto['blockTime']) =>
-            timeAgo(now - Number(blockTime.toString()) * 1000)
-          }
-        />
-      ),
-
-      action: (
-        <Cell
-          width={80}
-          render={(_, block: PreviewBlockDto) => (
-            <Link href={`/blocks/${block.slot}`}>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ borderRadius: 2, textTransform: 'none', minWidth: 'auto' }}
-              >
-                View
-              </Button>
-            </Link>
-          )}
+          render={(blockTime: PreviewBlockDto['blockTime']) => timeAgo(toDate(blockTime), { now })}
         />
       ),
     },
@@ -86,7 +91,6 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
           {sections.cells.blockhash}
           {sections.cells.transactionLength}
           {sections.cells.blockTime}
-          {sections.cells.action}
         </Table>
       </Stack>
 

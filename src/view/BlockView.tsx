@@ -1,10 +1,12 @@
 'use client';
 
+import { sumBy } from 'lodash';
 import { Stack } from '@mui/material';
+
 import type { BlockDto } from 'src/services';
-import { OverviewItem as OverviewItemBase } from 'src/components';
+import { formatNumber, toSol } from 'src/utils';
 import { withDefaultProps } from 'src/hoc';
-import { sum } from 'lodash';
+import { OverviewItem as OverviewItemBase } from 'src/components';
 
 const OverviewItem = withDefaultProps(OverviewItemBase, { subjectWidth: 200 });
 
@@ -15,8 +17,10 @@ interface BlockViewProps {
 }
 
 export default function BlockView({ block }: BlockViewProps) {
+  // --- SECTIONED ELEMENTS ---
+
   const sections = {
-    slot: <OverviewItem subject="Slot" value={block.slot} />,
+    slot: <OverviewItem subject="Slot" value={block.slot} copyable />,
 
     timestamp: (
       <OverviewItem
@@ -25,23 +29,26 @@ export default function BlockView({ block }: BlockViewProps) {
       />
     ),
 
-    blockhash: <OverviewItem subject="Block Hash" value={block.blockhash} />,
+    blockhash: <OverviewItem subject="Block Hash" value={block.blockhash} copyable />,
 
     reward: (
       <OverviewItem
         subject="Reward"
-        value={`${sum(block.rewards.map((reward) => Number(reward.lamports))) / 1000000000} SOL`}
+        value={`${formatNumber(toSol(sumBy(block.rewards, 'lamports')))} SOL`}
       />
     ),
 
-    leader: <OverviewItem subject="Leader" value={block.rewards[0]?.pubkey} />,
+    leader: <OverviewItem subject="Leader" value={block.rewards[0]?.pubkey} copyable />,
 
     transactions: (
-      <OverviewItem subject="Transactions" value={`${block.transactions.length} transactions`} />
+      <OverviewItem
+        subject="Transactions"
+        value={`${formatNumber(block.transactions.length)} transactions`}
+      />
     ),
 
     previousBlockhash: (
-      <OverviewItem subject="Previous Block Hash" value={block.previousBlockhash} />
+      <OverviewItem subject="Previous Block Hash" value={block.previousBlockhash} copyable />
     ),
   };
 
