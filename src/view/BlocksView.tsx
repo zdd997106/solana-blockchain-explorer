@@ -51,9 +51,9 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
         <Cell
           label="Block Hash"
           path="blockhash"
-          render={(blockhash, block) => (
-            <Description copyable value={block.slot}>
-              <Link href={`/blocks/${slot}`}>{blockhash}</Link>
+          render={(blockhash: string, block: PreviewBlockDto) => (
+            <Description copyable value={blockhash}>
+              <Link href={`/blocks/${block.slot}`}>{blockhash}</Link>
             </Description>
           )}
         />
