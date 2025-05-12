@@ -7,7 +7,10 @@ import Link from 'next/link';
 import { Chip, Pagination, Stack, Switch, Typography } from '@mui/material';
 
 import type { PreviewTransactionDto } from 'src/services';
+import { withDefaultProps } from 'src/hoc';
 import { Description } from 'src/components';
+
+const Status = withDefaultProps(Typography, { variant: 'caption', color: 'text.secondary' });
 
 // ----------
 
@@ -73,9 +76,9 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
           label="Status"
           path="meta.status"
           render={(status) => {
-            if (has(status, 'Ok')) return 'Success';
-            if (has(status, 'Err')) return 'Error';
-            return 'Unknown';
+            if (has(status, 'Ok')) return <Status color="success">Success</Status>;
+            if (has(status, 'Err')) return <Status color="error">Error</Status>;
+            return <Status>Unknown</Status>;
           }}
         />
       ),
@@ -108,8 +111,7 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
 
   return (
     <Stack spacing={2}>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" spacing={2}>
-        <Typography variant="h6">Transactions</Typography>
+      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="end" spacing={2}>
         {sections.excludeVoteSwitch}
       </Stack>
 

@@ -58,14 +58,26 @@ export default function AccountsView({ accounts, transaction }: AccountsViewProp
         />
       ),
 
+      postBalance: (
+        <Cell
+          label="Post Balance (SOL)"
+          width={160}
+          render={(_, _item, index) => (
+            <Typography variant="caption">
+              {formatNumber(toSol(postbalance[index] ?? 0n))}
+            </Typography>
+          )}
+        />
+      ),
+
       details: (
         <Cell
           label="Details"
-          width={200}
+          width={180}
           render={(_, item: TransactionAccountDto) => (
             <Stack direction="row" spacing={1}>
               {item.signer && <Chip label="Signer" color="primary" />}
-              {item.writable && <Chip label="Writable" color="secondary" />}
+              {item.writable && <Chip label="Writable" />}
             </Stack>
           )}
         />
@@ -78,6 +90,7 @@ export default function AccountsView({ accounts, transaction }: AccountsViewProp
       {sections.cells.index}
       {sections.cells.address}
       {sections.cells.change}
+      {sections.cells.postBalance}
       {sections.cells.details}
     </Table>
   );

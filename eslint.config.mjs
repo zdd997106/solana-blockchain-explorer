@@ -39,6 +39,7 @@ export default tsEslint.config({
     'no-restricted-exports': 'off',
     'no-shadow': 'off',
     'no-plusplus': 'off',
+    "no-param-reassign": "off",
     'import/no-named-as-default': 'off',
     'consistent-return': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

@@ -21,7 +21,9 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
   const sections = {
     slot: <OverviewItem subject="Slot" value={transaction.slot} />,
 
-    signature: <OverviewItem subject="Signature" value={transaction.transaction.signatures[0]} />,
+    signature: (
+      <OverviewItem copyable subject="Signature" value={transaction.transaction.signatures[0]} />
+    ),
 
     timestamp: (
       <OverviewItem
@@ -34,6 +36,7 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
 
     recentBlockhash: (
       <OverviewItem
+        copyable
         subject="Recent Block Hash"
         value={transaction.transaction.message.recentBlockhash}
       />

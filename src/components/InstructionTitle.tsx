@@ -19,9 +19,9 @@ export default function InstructionTitle({ instruction, index }: InstructionTitl
       <Chip
         label={`#${index}`}
         variant="outlined"
-        color="primary"
+        color="default"
         size="small"
-        sx={{ typography: 'caption' }}
+        sx={{ typography: 'caption', color: 'text.secondary' }}
       />
     ),
 
