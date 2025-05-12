@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { capitalize, snakeCase } from 'lodash';
 import pluralize from 'pluralize';
 
@@ -35,8 +36,8 @@ const intervals = {
 /**
  * Format a number with commas as thousands separators.
  */
-export function formatNumber(num: number | bigint) {
-  return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+export function formatNumber(num: number | bigint | BigNumber) {
+  return new BigNumber(num).toFixed().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function formatTitle(string: string) {
