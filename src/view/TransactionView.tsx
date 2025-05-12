@@ -1,6 +1,6 @@
 'use client';
 
-import { Stack } from '@mui/material';
+import { Link, Stack } from '@mui/material';
 
 import type { TransactionDto } from 'src/services';
 import { formatNumber, toDate, toSol } from 'src/utils';
@@ -19,7 +19,13 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
   // --- SECTIONED ELEMENTS ---
 
   const sections = {
-    slot: <OverviewItem subject="Slot" value={transaction.slot} />,
+    slot: (
+      <OverviewItem
+        subject="Slot"
+        value={<Link href={`/blocks/${transaction.slot}`}>{transaction.slot}</Link>}
+        copyable
+      />
+    ),
 
     signature: (
       <OverviewItem copyable subject="Signature" value={transaction.transaction.signatures[0]} />
@@ -52,7 +58,7 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
     ),
 
     transactionVersion: (
-      <OverviewItem subject="Transaction Version" value={transaction.version.toString()} />
+      <OverviewItem subject="Transaction Version" value={transaction.version?.toString()} />
     ),
   };
 

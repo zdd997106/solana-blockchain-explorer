@@ -35,7 +35,7 @@ export default function OverviewItem({
         {subject}
       </Typography>
 
-      <Description copyable={copyable}>{value}</Description>
+      <Description copyable={!!value && copyable}>{value}</Description>
     </Stack>
   );
 }

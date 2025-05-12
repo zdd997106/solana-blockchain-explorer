@@ -16,7 +16,8 @@ export default function PageError({ message }: PageErrorProps) {
       alignItems="center"
       justifyContent="center"
       margin="auto"
-      sx={{ paddingY: { xs: 3, md: 10 }, height: '100vh' }}
+      flexGrow={1}
+      sx={{ paddingY: { xs: 3, md: 10 } }}
     >
       <Stack spacing={1} sx={{ textAlign: 'center', paddingX: 2 }}>
         <Typography variant="h4" component="h1">

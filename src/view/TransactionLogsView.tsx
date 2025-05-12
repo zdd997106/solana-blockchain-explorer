@@ -9,7 +9,7 @@ import { withDefaultProps } from 'src/hoc';
 import { TerminalMessage } from 'src/components';
 
 const Chip = withDefaultProps(
-  styled(MuiChip)(({ theme }) => ({ ...theme.typography.caption, height: 20 })),
+  styled(MuiChip)(() => ({ height: 20 })),
   { size: 'small', variant: 'outlined' },
 );
 
