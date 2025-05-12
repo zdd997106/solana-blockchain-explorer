@@ -48,9 +48,12 @@ export default function AccountsView({ accounts, transaction }: AccountsViewProp
             return (
               <Typography
                 variant="caption"
-                color={getColor(sol, { positive: 'success.main', negative: 'error.main' })}
+                color={getColor(sol.toNumber(), {
+                  positive: 'success.main',
+                  negative: 'error.main',
+                })}
               >
-                {sol > 0 && '+'}
+                {sol.isGreaterThan(0) && '+'}
                 {formatNumber(sol)}
               </Typography>
             );
