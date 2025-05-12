@@ -1,11 +1,13 @@
-import { Signature, SolanaError } from '@solana/kit';
+import { isSignature, SolanaError } from '@solana/kit';
 import { RpcService } from './core';
 
 export default class TransactionService extends RpcService {
   public getTransaction = async (signature: string) => {
     try {
+      if (!isSignature(signature)) return null;
+
       const transaction = await this.rpc
-        .getTransaction(signature as Signature, {
+        .getTransaction(signature, {
           encoding: 'jsonParsed',
           maxSupportedTransactionVersion: 0,
         })
@@ -21,6 +23,24 @@ export default class TransactionService extends RpcService {
         return null;
       }
       throw error;
+    }
+  };
+
+  public searchTransaction = async (query: string) => {
+    try {
+      if (!isSignature(query)) return null;
+
+      const transaction = await this.rpc
+        .getTransaction(query, {
+          encoding: 'json',
+          maxSupportedTransactionVersion: 0,
+        })
+        .send();
+
+      if (!transaction) return null;
+      return { ...transaction, signature: transaction.transaction.signatures[0] };
+    } catch {
+      return null;
     }
   };
 }
