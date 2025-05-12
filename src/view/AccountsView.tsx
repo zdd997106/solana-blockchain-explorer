@@ -8,10 +8,7 @@ import type { TransactionAccountDto, TransactionDto } from 'src/services';
 import Description from 'src/components/Description';
 import { withDefaultProps } from 'src/hoc';
 
-const Chip = withDefaultProps(MuiChip, {
-  size: 'small',
-  sx: { typography: 'caption' },
-});
+const Chip = withDefaultProps(MuiChip, { size: 'small' });
 
 // ----------
 
@@ -47,7 +44,7 @@ export default function AccountsView({ accounts, transaction }: AccountsViewProp
 
             return (
               <Typography
-                variant="caption"
+                variant="body2"
                 color={getColor(sol.toNumber(), {
                   positive: 'success.main',
                   negative: 'error.main',
@@ -66,9 +63,7 @@ export default function AccountsView({ accounts, transaction }: AccountsViewProp
           label="Post Balance (SOL)"
           width={160}
           render={(_, _item, index) => (
-            <Typography variant="caption">
-              {formatNumber(toSol(postbalance[index] ?? 0n))}
-            </Typography>
+            <Typography variant="body2">{formatNumber(toSol(postbalance[index] ?? 0n))}</Typography>
           )}
         />
       ),

@@ -3,14 +3,14 @@
 import { has } from 'lodash';
 import { useMemo, useState } from 'react';
 import { Cell, Table } from 'gexii/table';
-import Link from 'next/link';
-import { Chip, Pagination, Stack, Switch, Typography } from '@mui/material';
+import { Chip, Link, Pagination, Stack, Switch, Typography } from '@mui/material';
 
 import type { PreviewTransactionDto } from 'src/services';
+import { toSol } from 'src/utils';
 import { withDefaultProps } from 'src/hoc';
 import { Description } from 'src/components';
 
-const Status = withDefaultProps(Typography, { variant: 'caption', color: 'text.secondary' });
+const Status = withDefaultProps(Typography, { typography: 'caption', color: 'text.secondary' });
 
 // ----------
 
@@ -66,7 +66,7 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
           width={150}
           label="Fee (SOL)"
           path="meta.fee"
-          render={(fee: bigint) => showDescription(Number(fee) / 1000000000)}
+          render={(fee: bigint) => showDescription(toSol(fee))}
         />
       ),
 
@@ -99,6 +99,14 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
       />
     ),
 
+    tablePlaceholder: (
+      <Stack sx={{ width: '100%', height: 200, justifyContent: 'center', alignItems: 'center' }}>
+        <Typography variant="body2" color="text.secondary">
+          No transactions found
+        </Typography>
+      </Stack>
+    ),
+
     pagination: (
       <Pagination
         page={page}
@@ -122,11 +130,15 @@ export default function TransactionsView({ transactions }: TransactionsViewProps
           {sections.cells.status}
           {sections.cells.fee}
         </Table>
+
+        {filteredTransactions.length === 0 && sections.tablePlaceholder}
       </Stack>
 
-      <Stack sx={{ maxWidth: '100%', overflowX: 'auto', alignSelf: 'end' }}>
-        {sections.pagination}
-      </Stack>
+      {filteredTransactions.length > 0 && (
+        <Stack sx={{ maxWidth: '100%', overflowX: 'auto', alignSelf: 'end' }}>
+          {sections.pagination}
+        </Stack>
+      )}
     </Stack>
   );
 }

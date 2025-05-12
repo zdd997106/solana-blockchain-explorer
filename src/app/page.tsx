@@ -1,48 +1,31 @@
-import { Container, Typography } from '@mui/material';
-import BlockService from 'src/services/block';
-import { cacheable } from 'src/utils';
-import BlocksView from 'src/view/BlocksView';
+import { Box, Container, Link, Stack } from '@mui/material';
+
+import { Logo, SolanaSearchField } from 'src/components';
 
 // ----------
 
-interface PageProps {
-  searchParams: Promise<{ slot: string; page: number; limit: number }>;
-}
-
-export default async function Page({ searchParams }: PageProps) {
-  const { page = 1, limit = 10 } = await searchParams;
-  const customSlot = getCustomSlot(await searchParams);
-
-  const blocks = await getRpcLatestBlocks({
-    limit,
-    slot: customSlot ? BigInt(customSlot) - BigInt((page - 1) * limit) : undefined,
-  });
-  const slot = customSlot ? BigInt(customSlot) : blocks[0].slot;
-
+export default function Page() {
   return (
-    <Container sx={{ paddingY: 5 }}>
-      <Typography variant="h4" gutterBottom>
-        Recent Blocks
-      </Typography>
+    <Stack
+      padding={4}
+      flexGrow={1}
+      justifyContent="center"
+      alignItems="center"
+      sx={{ width: '100vw' }}
+    >
+      <Box sx={{ marginBottom: 4 }}>
+        <Logo />
+      </Box>
 
-      <BlocksView blocks={blocks} now={Date.now()} page={page} slot={slot.toString()} />
-    </Container>
+      <Container maxWidth="sm">
+        <Stack spacing={2}>
+          <SolanaSearchField />
+
+          <Link href="/blocks" typography="body2" underline="hover">
+            {'Go check out the latest blocks'}
+          </Link>
+        </Stack>
+      </Container>
+    </Stack>
   );
 }
-
-// ----- HELPERS -----
-
-function getCustomSlot(searchParams: Awaited<PageProps['searchParams']>) {
-  try {
-    if (searchParams.slot) return BigInt(searchParams.slot);
-    return undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-const blockService = new BlockService();
-const getRpcLatestBlocks = cacheable(blockService.getLatestBlocks, {
-  revalidate: 1,
-  useStaleWhileRevalidate: true,
-});

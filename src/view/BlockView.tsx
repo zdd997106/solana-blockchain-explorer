@@ -25,7 +25,7 @@ export default function BlockView({ block }: BlockViewProps) {
     timestamp: (
       <OverviewItem
         subject="Timestamp"
-        value={new Date(+block.blockTime.toString() * 1000).toUTCString()}
+        value={block.blockTime && new Date(+block.blockTime.toString() * 1000).toUTCString()}
       />
     ),
 

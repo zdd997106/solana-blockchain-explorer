@@ -1,13 +1,14 @@
 'use client';
 
+import { isValidElement } from 'react';
 import { isNil } from 'lodash';
 import { mixins } from 'gexii/theme';
+import { BigNumber } from 'bignumber.js';
 import { useCopyToClipboard } from 'react-use';
 import { IconButton, Stack, Typography } from '@mui/material';
 import CopyIcon from '@mui/icons-material/ContentCopyRounded';
 
 import { formatNumber } from 'src/utils';
-import { isValidElement } from 'react';
 
 // ----------
 
@@ -37,14 +38,18 @@ export default function Description({ children, value = children, copyable }: De
 // --- HELPERS ---
 
 function formatValue(value: unknown): string {
-  if (isNil(value)) return 'Unavailable';
+  if (isNil(value)) return 'Not available';
 
   if (typeof value === 'string') return value;
 
-  if (typeof value === 'number' || typeof value === 'bigint') return formatNumber(value);
+  if (typeof value === 'number' || typeof value === 'bigint' || BigNumber.isBigNumber(value))
+    return formatNumber(value);
 
   if (Array.isArray(value)) return value.map(formatValue).join(', ');
-  return JSON.stringify(value, (_key, value) =>
-    typeof value === 'bigint' ? value.toString() : value,
-  );
+
+  return JSON.stringify(value, (_key, value) => {
+    if (BigNumber.isBigNumber(value)) return value.toString();
+    if (typeof value === 'bigint') return value.toString();
+    return value;
+  });
 }

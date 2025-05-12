@@ -2,12 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { Table, Cell } from 'gexii/table';
-import { Pagination, Stack } from '@mui/material';
-import Link from 'next/link';
+import { CircularProgress, Link, Pagination, Stack, Typography } from '@mui/material';
 
 import { formatNumber, timeAgo, toDate } from 'src/utils';
 import type { PreviewBlockDto } from 'src/services';
 import { Description } from 'src/components';
+import { useAction } from 'gexii';
+import { useTransitionCallback } from './useTransition';
 
 // ----------
 
@@ -21,14 +22,19 @@ interface BlocksViewProps {
 export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps) {
   const router = useRouter();
 
+  // --- FUNCTIONS ---
+
+  const redirect = useTransitionCallback<typeof router.push>((...args) => router.push(...args));
+
   // --- HANDLERS ---
 
-  const handleChangePage = (_event: unknown, page: number) => {
+  const handleChangePage = useAction(async (_event: unknown, page: number) => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('page', page.toString());
     searchParams.set('slot', slot);
-    router.push(`?${searchParams.toString()}`);
-  };
+    await redirect(`?${searchParams.toString()}`);
+  });
+  const loading = handleChangePage.isLoading();
 
   // --- SECTIONED ELEMENTS ---
 
@@ -73,6 +79,25 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
       ),
     },
 
+    tablePlaceholder: (
+      <Stack sx={{ width: '100%', height: 200, justifyContent: 'center', alignItems: 'center' }}>
+        <Typography variant="body2" color="text.secondary">
+          No blocks found
+        </Typography>
+      </Stack>
+    ),
+
+    tableLoading: (
+      <Stack
+        position="absolute"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ width: '100%', height: '100%', top: 0, left: 0 }}
+      >
+        <CircularProgress color="inherit" size={60} />
+      </Stack>
+    ),
+
     pagination: (
       <Pagination
         page={+page}
@@ -84,7 +109,7 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} position="relative" sx={{ opacity: loading ? 0.5 : 1 }}>
       <Stack sx={{ maxWidth: '100%', overflowX: 'auto' }}>
         <Table source={blocks} sx={{ tableLayout: 'fixed', minWidth: 800 }}>
           {sections.cells.slot}
@@ -92,11 +117,15 @@ export default function BlocksView({ blocks, page, slot, now }: BlocksViewProps)
           {sections.cells.transactionLength}
           {sections.cells.blockTime}
         </Table>
+
+        {blocks.length === 0 && sections.tablePlaceholder}
       </Stack>
 
       <Stack sx={{ maxWidth: '100%', overflowX: 'auto', alignSelf: 'end' }}>
         {sections.pagination}
       </Stack>
+
+      {loading && sections.tableLoading}
     </Stack>
   );
 }
