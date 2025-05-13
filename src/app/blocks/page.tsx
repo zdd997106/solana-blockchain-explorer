@@ -1,8 +1,14 @@
 import { Container, Typography } from '@mui/material';
 
 import BlockService from 'src/services/block';
-import { cacheable } from 'src/utils';
 import BlocksView from 'src/view/BlocksView';
+
+const blockService = new BlockService();
+
+// ----------
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 // ----------
 
@@ -14,10 +20,11 @@ export default async function Page({ searchParams }: PageProps) {
   const { page = 1, limit = 10 } = await searchParams;
   const customSlot = getCustomSlot(await searchParams);
 
-  const blocks = await getRpcLatestBlocks({
+  const blocks = await blockService.getLatestBlocks({
     limit,
     slot: customSlot ? BigInt(customSlot) - BigInt((page - 1) * limit) : undefined,
   });
+
   const slot = customSlot ? BigInt(customSlot) : blocks[0].slot;
 
   return (
@@ -41,9 +48,3 @@ function getCustomSlot(searchParams: Awaited<PageProps['searchParams']>) {
     return undefined;
   }
 }
-
-const blockService = new BlockService();
-const getRpcLatestBlocks = cacheable(blockService.getLatestBlocks, {
-  revalidate: 1,
-  useStaleWhileRevalidate: true,
-});

@@ -1,14 +1,21 @@
 'use client';
 
 import { Stack, Typography, Link } from '@mui/material';
+import { useEffect } from 'react';
 
 // ----------
 
 interface PageErrorProps {
-  message?: React.ReactNode;
+  error: Error;
 }
 
-export default function PageError({ message }: PageErrorProps) {
+export default function PageError({ error }: PageErrorProps) {
+  // --- EFFECTS ---
+
+  useEffect(() => {
+    console.error('Error occurred:', error);
+  }, []);
+
   return (
     <Stack
       direction="column"
@@ -21,7 +28,7 @@ export default function PageError({ message }: PageErrorProps) {
     >
       <Stack spacing={1} sx={{ textAlign: 'center', paddingX: 2 }}>
         <Typography variant="h4" component="h1">
-          {message || 'Something Went Wrong'}
+          Something Went Wrong
         </Typography>
 
         <Typography variant="body2" color="action.active">
