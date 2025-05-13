@@ -7,8 +7,7 @@ import { CircularProgress, Link, Pagination, Stack, Typography } from '@mui/mate
 import { formatNumber, timeAgo, toDate } from 'src/utils';
 import type { PreviewBlockDto } from 'src/services';
 import { Description } from 'src/components';
-import { useAction } from 'gexii';
-import { useTransitionCallback } from './useTransition';
+import { useAction, useTransitionCallback } from 'gexii/hooks';
 
 // ----------
 
