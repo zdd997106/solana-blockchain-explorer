@@ -9,6 +9,7 @@ import Description from './Description';
 interface OverviewItemProps {
   subject: string;
   value: unknown;
+  children?: React.ReactNode;
   copyable?: boolean;
   subjectWidth?: string | number;
 }
@@ -16,6 +17,7 @@ interface OverviewItemProps {
 export default function OverviewItem({
   subject,
   value,
+  children,
   copyable,
   subjectWidth,
 }: OverviewItemProps) {
@@ -35,7 +37,9 @@ export default function OverviewItem({
         {subject}
       </Typography>
 
-      <Description copyable={!!value && copyable}>{value}</Description>
+      <Description value={value} copyable={!!value && copyable}>
+        {children ?? value}
+      </Description>
     </Stack>
   );
 }

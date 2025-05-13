@@ -20,11 +20,9 @@ export default function TransactionView({ transaction }: TransactionViewProps) {
 
   const sections = {
     slot: (
-      <OverviewItem
-        subject="Slot"
-        value={<Link href={`/blocks/${transaction.slot}`}>{transaction.slot}</Link>}
-        copyable
-      />
+      <OverviewItem subject="Slot" value={transaction.slot} copyable>
+        <Link href={`/blocks/${transaction.slot}`}>{transaction.slot}</Link>
+      </OverviewItem>
     ),
 
     signature: (
