@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Solana Blockchain Explorer
 
-## Getting Started
+A lightweight, React-based blockchain explorer for the Solana network, built with **Next.js (App Router)** and deployed on **Vercel**. This project is a take-home assignment for Zeus Network.
 
-First, run the development server:
+[🔗 Assignment Description](https://zeusnetwork.notion.site/Take-home-Assignment-Solana-Blockchain-Explorer-Front-end-1abcc3db3084801cbbc5cbb45fc9165a)
+
+---
+
+## ✅ Features
+
+- 🔄 **Latest Blocks List**: Homepage displays paginated list of recent blocks on Solana.
+- 📦 **Block Details Page**: View full metadata and transactions of a selected block.
+- 🔍 **Transaction Details Page**: Inspect complete details of any transaction.
+- 🔎 **Search Feature**: Search by block slot or transaction signature.
+- ↕️ **Sorting & Filtering**: Sort and filter block and transaction data by key columns.
+- 🚀 **Deployed on Vercel** for fast, SSR-ready performance.
+
+---
+
+## 🛠️ Configuration (Required Before Running)
+
+Before starting development, create a `.env.local` file at the root of the project using the provided `.env.example`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
+````
+
+Then, configure the required Solana RPC endpoint:
+
+```env
+CLUSTER_URL=https://api.devnet.solana.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You must set this variable to connect to a valid Solana RPC node.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Getting Started
 
-## Learn More
+### 1. Install dependencies
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Run in development mode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🏗️ Architecture
+
+This project is built with:
+
+* **Next.js (App Router)** – Modern routing, layouts, and server actions
+* **React** – Component-based UI development
+* **Material UI (MUI)** – Component-based UI styling framework
+* **@solana/kit** – Official Solana SDK (v2) for interacting with the blockchain
+* **TypeScript** – Type safety and better DX
+* **Server Actions** – Used for most Solana API interactions instead of React Query
+* **Gexii** – A custom utility library used internally
+
+---
+
+## 📁 Directory Structure
+
+```
+src/
+├── actions/               # Server actions for API handling
+│   └── search.ts
+├── app/                   # App directory with Next.js routing
+│   ├── blocks/            # Block list and detail pages
+│   ├── transactions/      # Transaction list and detail pages
+│   ├── page.tsx           # Homepage
+│   ├── layout.tsx         # App-wide layout
+│   └── error.tsx          # Global error handling
+├── components/            # Reusable UI components
+├── constants/             # Constants such as IDL maps
+├── hoc/                   # Higher-order components
+├── layout/                # Layout and header
+├── services/              # Blockchain interaction logic
+│   ├── block.ts
+│   ├── transaction.ts
+│   └── core.ts
+├── theme/                 # MUI theme configuration and overrides
+├── utils/                 # Utility functions
+├── view/                  # Page-specific views and fragments
+.env
+.env.example
+```
+
+---
+
+## 🔧 Build for Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+This compiles the app and starts it in production mode.
+
+---
+
+## 📦 Deployment
+
+This project is deployed on **Vercel** to take advantage of its native Next.js support and fast global CDN.
+
+### To deploy:
+
+1. Push your code to a GitHub repository.
+2. Connect the repo to [Vercel](https://vercel.com).
+3. Set the `CLUSTER_URL` environment variable in the Vercel dashboard.
+4. Vercel will handle build and deployment automatically.
+
+---
+
+## 📄 License
+
+This project is provided for evaluation purposes only as part of a technical assignment.
