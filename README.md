@@ -22,7 +22,7 @@ A lightweight, React-based blockchain explorer for the Solana network, built wit
 Before starting development, create a `.env.local` file at the root of the project using the provided `.env.example`:
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ````
 
 Then, configure the required Solana RPC endpoint:
