@@ -2,7 +2,7 @@
 
 import { AppBar, Box, inputBaseClasses, Stack, Toolbar } from '@mui/material';
 
-import { SolanaSearchField } from 'src/components';
+import { SolanaSearchField, ClusterSwitchButton } from 'src/components';
 
 // ----------
 
@@ -20,6 +20,7 @@ export default function Header({ logo, ..._props }: HeaderProps) {
         />
       </Box>
     ),
+    clusterSwitch: <ClusterSwitchButton />,
   };
 
   return (
@@ -28,6 +29,7 @@ export default function Header({ logo, ..._props }: HeaderProps) {
         <Stack direction="row" spacing={2} alignItems="center" width="100%">
           {logo}
           {sections.search}
+          {sections.clusterSwitch}
         </Stack>
       </Toolbar>
     </AppBar>

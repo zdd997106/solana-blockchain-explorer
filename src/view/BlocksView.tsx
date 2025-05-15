@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Table, Cell } from 'gexii/table';
 import { CircularProgress, Link, Pagination, Stack, Typography } from '@mui/material';
 
 import { formatNumber, timeAgo, toDate } from 'src/utils';
 import type { PreviewBlockDto } from 'src/services';
-import { Description } from 'src/components';
 import { useAction, useTransitionCallback } from 'gexii/hooks';
+import { useRouter } from 'src/hooks';
+import { Description } from 'src/components';
 
 // ----------
 

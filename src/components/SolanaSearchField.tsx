@@ -1,24 +1,28 @@
 'use client';
 
 import { useState, Fragment } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useAction } from 'gexii/hooks';
 import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
 
+import { useRouter } from 'src/hooks';
 import { solanaSearch } from 'src/actions/search';
+import { ECluster } from 'src/services';
 
 // ----------
 
 interface SolanaSearchFieldProps extends BaseTextFieldProps {}
 
 export default function SolanaSearchField({ ...props }: SolanaSearchFieldProps) {
+  const searchParams = useSearchParams();
   const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const search = useAction(async (query: string) => solanaSearch(query), {
-    defaultValue: [],
-  });
+  const search = useAction(
+    async (query: string) => solanaSearch(searchParams.get('cluster') as ECluster, query),
+    { defaultValue: [] },
+  );
 
   // ----- HANDLERS -----
 

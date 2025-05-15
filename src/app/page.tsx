@@ -18,7 +18,7 @@ export default function Page() {
       </Box>
 
       <Container maxWidth="sm">
-        <Stack spacing={2}>
+        <Stack spacing={2} paddingBottom={6}>
           <SolanaSearchField />
 
           <Link href="/blocks" typography="body2" underline="hover">
