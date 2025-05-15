@@ -1,5 +1,5 @@
 import { Components, Theme } from '@mui/material';
-import Link from 'next/link';
+import Link from 'src/components/Link';
 
 export const overwrites: Components<Theme> = {
   MuiAppBar: {

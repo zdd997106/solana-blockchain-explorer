@@ -31,7 +31,9 @@ export const env = {
 
 const config = {
   ...process.env,
-  CLUSTER_URL: process.env.CLUSTER_URL,
+  MAINNET_URL: process.env.MAINNET_URL,
+  TESTNET_URL: process.env.TESTNET_URL,
+  DEVNET_URL: process.env.DEVNET_URL,
 };
 
 // ----- TYPES -----

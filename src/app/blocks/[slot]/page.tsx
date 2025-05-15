@@ -3,11 +3,9 @@
 import { Container, Card, Typography, Stack } from '@mui/material';
 import { notFound } from 'next/navigation';
 
-import { BlockService } from 'src/services';
+import { BlockService, ECluster } from 'src/services';
 import BlockView from 'src/view/BlockView';
 import TransactionsView from 'src/view/TransactionsView';
-
-const blockService = new BlockService();
 
 // ----------
 
@@ -18,11 +16,15 @@ export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ slot: string }>;
+  searchParams: Promise<{ cluster?: ECluster }>;
 }
 
 export default async function Page(props: PageProps) {
-  const slot = await props.params;
-  const block = await blockService.getBlock(BigInt(slot.slot));
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  const blockService = new BlockService(searchParams.cluster);
+  const block = await blockService.getBlock(BigInt(params.slot));
 
   if (!block) {
     return notFound();

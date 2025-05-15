@@ -1,13 +1,11 @@
 'use server';
 
-import { BlockService, TransactionService } from 'src/services';
-
-const blockService = new BlockService();
-const transactionService = new TransactionService();
+import { BlockService, ECluster, TransactionService } from 'src/services';
 
 // ----------
 
-export async function solanaSearch(query: string) {
+export async function solanaSearch(cluster: ECluster | undefined, query: string) {
+  const blockService = new BlockService(cluster);
   const block = await blockService.searchBlock(query);
   if (block)
     return [
@@ -18,6 +16,7 @@ export async function solanaSearch(query: string) {
       },
     ];
 
+  const transactionService = new TransactionService(cluster);
   const transaction = await transactionService.searchTransaction(query);
   if (transaction)
     return [

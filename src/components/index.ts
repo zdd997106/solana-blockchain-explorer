@@ -4,3 +4,4 @@ export { default as InstructionTitle } from './InstructionTitle';
 export { default as TerminalMessage } from './TerminalMessage';
 export { default as SolanaSearchField } from './SolanaSearchField';
 export { default as Logo } from './Logo';
+export { default as ClusterSwitchButton } from './ClusterSwitchButton';

@@ -2,14 +2,12 @@ import { Fragment } from 'react';
 import { notFound } from 'next/navigation';
 import { Card, Container, Stack, Typography } from '@mui/material';
 
-import { InnerInstructionDto, InstructionDto, TransactionService } from 'src/services';
+import { ECluster, InnerInstructionDto, InstructionDto, TransactionService } from 'src/services';
 import { InstructionTitle } from 'src/components';
 import InstructionView from 'src/view/InstructionView';
 import TransactionView from 'src/view/TransactionView';
 import AccountsView from 'src/view/AccountsView';
 import TransactionLogsView from 'src/view/TransactionLogsView';
-
-const transactionService = new TransactionService();
 
 // ----------
 
@@ -20,10 +18,14 @@ export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ signature: string }>;
+  searchParams: Promise<{ cluster?: ECluster }>;
 }
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  const transactionService = new TransactionService(searchParams.cluster);
   const transaction = await transactionService.getTransaction(params.signature);
 
   if (!transaction) {

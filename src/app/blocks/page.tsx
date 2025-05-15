@@ -1,9 +1,8 @@
 import { Container, Typography } from '@mui/material';
+import { ECluster } from 'src/services';
 
 import BlockService from 'src/services/block';
 import BlocksView from 'src/view/BlocksView';
-
-const blockService = new BlockService();
 
 // ----------
 
@@ -13,13 +12,14 @@ export const dynamic = 'force-dynamic';
 // ----------
 
 interface PageProps {
-  searchParams: Promise<{ slot: string; page: number; limit: number }>;
+  searchParams: Promise<{ slot: string; page: number; limit: number; cluster?: ECluster }>;
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { page = 1, limit = 10 } = await searchParams;
+  const { page = 1, limit = 10, cluster } = await searchParams;
   const customSlot = getCustomSlot(await searchParams);
 
+  const blockService = new BlockService(cluster);
   const blocks = await blockService.getLatestBlocks({
     limit,
     slot: customSlot ? BigInt(customSlot) - BigInt((page - 1) * limit) : undefined,
