@@ -16,7 +16,7 @@
     "@mui/material-nextjs": "^6.4.3",
     "@solana/kit": "^2.1.0",
     "bignumber.js": "^9.3.0",
-    "gexii": "^0.0.38",
+    "gexii": "^0.0.39",
     "lodash": "^4.17.21",
     "next": "15.3.2",
     "pluralize": "^8.0.0",
