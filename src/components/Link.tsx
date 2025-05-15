@@ -2,13 +2,15 @@
 
 import NextLink from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
+
+// ----------
 
 interface LinkProps extends Omit<React.ComponentProps<typeof NextLink>, 'href'> {
   href: string;
 }
 
-export default function Link({ children, ...props }: LinkProps) {
+function LinkBase({ children, ...props }: LinkProps) {
   const searchParams = useSearchParams();
   const cluster = searchParams.get('cluster');
 
@@ -24,8 +26,18 @@ export default function Link({ children, ...props }: LinkProps) {
   }, [props.href, cluster]);
 
   return (
-    <NextLink {...props} href={href}>
-      {children}
-    </NextLink>
+    <Suspense fallback={<NextLink {...props}>{children}</NextLink>}>
+      <NextLink {...props} href={href}>
+        {children}
+      </NextLink>
+    </Suspense>
+  );
+}
+
+export default function Link(props: LinkProps) {
+  return (
+    <Suspense fallback={<NextLink {...props} />}>
+      <LinkBase {...props} />
+    </Suspense>
   );
 }

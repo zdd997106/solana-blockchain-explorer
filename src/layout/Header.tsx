@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { AppBar, Box, inputBaseClasses, Stack, Toolbar } from '@mui/material';
 
 import { SolanaSearchField, ClusterSwitchButton } from 'src/components';
@@ -13,14 +14,20 @@ export interface HeaderProps {
 export default function Header({ logo, ..._props }: HeaderProps) {
   const sections = {
     search: (
-      <Box flexGrow={1} paddingY={1}>
-        <SolanaSearchField
-          size="small"
-          sx={{ [`.${inputBaseClasses.root}`]: { bgcolor: 'background.paper' } }}
-        />
-      </Box>
+      <Suspense>
+        <Box flexGrow={1} paddingY={1}>
+          <SolanaSearchField
+            size="small"
+            sx={{ [`.${inputBaseClasses.root}`]: { bgcolor: 'background.paper' } }}
+          />
+        </Box>
+      </Suspense>
     ),
-    clusterSwitch: <ClusterSwitchButton />,
+    clusterSwitch: (
+      <Suspense>
+        <ClusterSwitchButton />
+      </Suspense>
+    ),
   };
 
   return (

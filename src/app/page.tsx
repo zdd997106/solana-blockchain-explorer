@@ -1,4 +1,5 @@
 import { Box, Container, Link, Stack } from '@mui/material';
+import { Suspense } from 'react';
 
 import { Logo, SolanaSearchField } from 'src/components';
 
@@ -19,7 +20,9 @@ export default function Page() {
 
       <Container maxWidth="sm">
         <Stack spacing={2} paddingBottom={6}>
-          <SolanaSearchField />
+          <Suspense>
+            <SolanaSearchField />
+          </Suspense>
 
           <Link href="/blocks" typography="body2" underline="hover">
             {'Go check out the latest blocks'}
